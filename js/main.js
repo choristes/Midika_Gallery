@@ -4,10 +4,10 @@
 var helper = function () {
     var o = {};
 
-    o.resizeTimer = null; // onresize処理のタイマー
+    o.resizeTimer = null; // resize処理のタイマー
     o.photoItemWidth = 0; // .photo-item の width
     o.picNum = 3; // 画像の枚数（ホーム画像を含めて）
-    o.onPic = 0; // 真ん中にある画像の番号
+    o.onPic = 0; // 画面の真ん中にある画像の番号
 
     o.resizeHandler = function () {
         var viewHeight = $(document).height() - $('header').height() * 2; // .view の height 
@@ -26,9 +26,7 @@ var helper = function () {
 
         $('.view').height(viewHeight);
         $('.photo-item').width(o.photoItemWidth)
-            .first().css('margin-left', endItemMargin + 'px')
-            .end()
-            .last().css('margin-right', endItemMargin + 'px');
+            .first().css('margin-left', endItemMargin + 'px');
 
         $('.photo-frame').height($('.photo-frame').width());
         $('.photo-pic-overlay').height($('.photo-pic-overlay').width());
@@ -37,7 +35,7 @@ var helper = function () {
     };
 
     o.resetPhotoListPos = function (e) {
-        $('.photo-list').css('left', '-' + (o.photoItemWidth * o.onPic) +'px');
+        $('.photo-list').css('left', '-' + ((o.photoItemWidth) * o.onPic) +'px'); // ズレ修正
     };
 
     o.init = function () {
@@ -53,7 +51,7 @@ var helper = function () {
             }, 100);
             // 問題：どうして縦になるとき、resizeHandler は二回も実行される？
             // タイマーをクリアしたから、実行回数は一回だけなはずだが
-            // 原因：resizeHandlerが実行した後、DOMの変動によってresizeイベントが引き起こされたのです
+            // 原因：スマホでresizeHandlerが実行した後、DOMの変動によってresizeイベントが引き起こされたのです
         });
     };        
 
@@ -84,14 +82,14 @@ var swipeControl = function () {
                 // 50px 以上も移動したら、スワイプ操作だと認識される
                 if (touch.clientX - startX < -50) {
                     if (helper.onPic < helper.picNum - 1) {
-                        styleObj.left = '-=' + helper.photoItemWidth;
+                        styleObj.left = '-=' + (helper.photoItemWidth); // ズレ修正
                         helper.onPic += 1;
                     } else {
                         // ここに「リミット」の演出を入れる予定
                     }
                 } else if (touch.clientX - startX > 50) {
                     if (helper.onPic > 0) {
-                        styleObj.left = '+=' + helper.photoItemWidth;
+                        styleObj.left = '+=' + (helper.photoItemWidth); // ズレ修正
                         helper.onPic -= 1;
                     } else {
                         // ここに「リミット」の演出を入れる予定
@@ -112,11 +110,70 @@ var swipeControl = function () {
     return o;
 }();
 
+// 抽出関数（JSONPでInstagramのAPIからデータを抽出）
+// Geolocationを取得してから初期化される
+function gatherer (lat, lng) {
+    var url = 'https://api.instagram.com/v1/media/search?lat='
+            + lat
+            + '&lng='
+            + lng
+            + '&distance=5000'
+            + '&client_id=9e3fbb0b157c4390b1c224f0f174e39c';
+    console.log(url);
+
+    
+    // JSONP
+    $.getJSON(url + "&callback=?", function (result) {
+        // .photo-item の個数を満たす
+        helper.picNum = result.data.length + $('.instruction').length;
+        while ($('.photo-item').length < helper.picNum) {
+            $('.photo-item:last').clone(true).appendTo($('.photo-list'));
+        }
+
+        // .photo-item の詳細を入れる
+        $.each(result.data, function (index, dataItem) {
+            // data を整理
+            var info = {
+                lowRes: dataItem.images.low_resolution.url,
+                stdRes: dataItem.images.standard_resolution.url,
+                caption: dataItem.caption ? dataItem.caption.text : 'Untitled',
+                time: new Date(dataItem.created_time * 1000), // UNIX Time Stamp をJSのDate対象に変換
+                likeNum: dataItem.likes.count,
+                comNum: dataItem.comments.count
+            };
+
+            // info 詳細を入れる
+            $('.photo-item').not('.instruction').eq(index)
+                .find('.photo-pic')
+                    .attr('src', info.lowRes)
+                    .attr('alt', info.caption)
+                .end()
+                .find('.photo-time')
+                    .html(
+                        info.time.getYear() + '.'
+                        + info.time.getMonth() + '.'
+                        + info.time.getDate() + ' '
+                        + info.time.getHours() + ':'
+                        + info.time.getMinutes()
+                    )
+                .end()
+                .find('.photo-title')
+                    .html(info.caption)
+                .end()
+                .find('photo-interactions')
+                    .html(info.likeNum + ' ♥ ' + info.comNum + ' …');
+                console.log('updated!');
+        });
+    });
+};
+
 $(function () {
     
     /* Init */
     swipeControl.init();
     helper.init();
+
+    gatherer(31.232803,121.475548); // Test
 
     /* Test */
     // $(window).bind('resize', function () {
