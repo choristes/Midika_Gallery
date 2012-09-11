@@ -20,7 +20,7 @@ var helper = function () {
             o.photoItemWidth = window.innerWidth * 0.4;
         }
 
-        endItemMargin = (window.innerWidth - o.photoItemWidth) / 2;
+        endItemMargin = Math.floor(($('.view').width() - o.photoItemWidth) / 2);
 
 
 
