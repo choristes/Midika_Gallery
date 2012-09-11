@@ -160,7 +160,7 @@ footer {
 }
 
 .photo-item {
-    // width は media queries によって変化、JS によって設置
+    // width はデバイスとの向きとスクリーンサイズによって変化、JS によって設置
     // SP では clientWidth の 75% が目安となる
     // Tablet では clientWidth の % が目安となる（要検討）
     // PC では clientWidth の % が目安となる（要検討）
@@ -169,6 +169,8 @@ footer {
 
 .photo-frame {
     position: relative;
+    // width は media queries （デバイスの向き）によって設置
+    // 縦の場合は 64%、横の場合は 30%
     width: 64%;
     margin: 0 auto;
 
@@ -178,6 +180,12 @@ footer {
 
     -webkit-box-shadow:  0 6px 24px @shadow-color;
     box-shadow: 0 6px 24px @shadow-color;
+}
+
+@media only screen and (orientation: landscape) {
+    .photo-frame {
+        width: 30%;
+    }
 }
 
 .photo-pic {

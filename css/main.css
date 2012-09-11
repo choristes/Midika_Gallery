@@ -133,6 +133,11 @@ footer {
   -webkit-box-shadow: 0 6px 24px #999999;
   box-shadow: 0 6px 24px #999999;
 }
+@media only screen and (orientation: landscape) {
+  .photo-frame {
+    width: 30%;
+  }
+}
 .photo-pic {
   width: 100%;
   height: auto;
