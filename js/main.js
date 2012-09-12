@@ -8,6 +8,7 @@ var helper = function () {
     o.photoItemWidth = 0; // .photo-item の width
     o.picNum = 3; // 画像の枚数（ホーム画像を含めて）
     o.onPic = 0; // 画面の真ん中にある画像の番号
+    window.orientation = (typeof window.orientation !== 'undefined') ? window.orientation : 90;
 
     o.resizeHandler = function () {
         var viewHeight = $(document).height() - $('header').height() * 2; // .view の height 
@@ -15,7 +16,7 @@ var helper = function () {
         // デフォルト デバイスの向きが縦の場合
         o.photoItemWidth = Math.floor(window.innerWidth * 0.75);
         
-        if (window.orientation && (window.orientation === 90 || window.orientation === -90)) {
+        if (window.orientation === 90 || window.orientation === -90) {
             // デバイスの向きが横の場合
             o.photoItemWidth = Math.floor(window.innerWidth * 0.4);
         }

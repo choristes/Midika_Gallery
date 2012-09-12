@@ -125,6 +125,7 @@ footer {
   position: absolute;
   left: 0;
   top: 0;
+  padding-top: 1em;
   -webkit-transition: all 0.3s ease 0s;
   -moz-transition: all 0.3s ease 0s;
   -o-transition: all 0.3s ease 0s;
