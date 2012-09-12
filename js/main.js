@@ -112,7 +112,7 @@ var swipeControl = function () {
 
 // 抽出関数（JSONPでInstagramのAPIからデータを抽出）
 // Geolocationを取得してから初期化される
-function gatherer (lat, lng) {
+function dataGatherer (lat, lng) {
     var url = 'https://api.instagram.com/v1/media/search?lat='
             + lat
             + '&lng='
@@ -167,13 +167,39 @@ function gatherer (lat, lng) {
     });
 };
 
+// Geolocationコントロール   
+var geolocation = function () {
+    var o = {};
+
+    o.init = function () {
+
+        // Loading表現
+
+        // Callbackで
+        // Loading表現を切る
+        // 位置情報を使ってInstagram APIと通信
+        function callback (pos) {
+            var lat = pos.coords.latitude,
+                lng = pos.coords.longitude;
+
+            console.log(lat + ' ' + lng);
+            dataGatherer(lat, lng);
+        };
+
+        // Geolocationを取得
+        navigator.geolocation.getCurrentPosition(callback);
+    };
+
+    return o;
+}();
+
 $(function () {
     
     /* Init */
     swipeControl.init();
     helper.init();
 
-    gatherer(31.232803,121.475548); // Test
+    geolocation.init();
 
     /* Test */
     // $(window).bind('resize', function () {
