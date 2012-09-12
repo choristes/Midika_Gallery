@@ -13,11 +13,11 @@ var helper = function () {
         var viewHeight = $(document).height() - $('header').height() * 2; // .view の height 
 
         // デフォルト デバイスの向きが縦の場合
-        o.photoItemWidth = window.innerWidth * 0.75;
+        o.photoItemWidth = Math.floor(window.innerWidth * 0.75);
         
         if (window.orientation && (window.orientation === 90 || window.orientation === -90)) {
             // デバイスの向きが横の場合
-            o.photoItemWidth = window.innerWidth * 0.4;
+            o.photoItemWidth = Math.floor(window.innerWidth * 0.4);
         }
 
         endItemMargin = Math.floor(($('.view').width() - o.photoItemWidth) / 2);
@@ -66,9 +66,34 @@ var swipeControl = function () {
     var o = {},
         startX = 0;
 
-    function touchHandler (e) {
-        var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0], // jQuery eventObj fix
+    // .photo-list を動かす
+    o.gotoPic = function (step) {
+        var styleObj = {};
+        step = Math.floor(step);
+
+        if (step > 0) {
+            if (helper.onPic < helper.picNum - 1) {
+                styleObj.left = '-=' + (helper.photoItemWidth); // ズレ修正
+                helper.onPic += 1;
+            } else {
+                // ここに「リミット」の演出を入れる予定
+            }
+        } else if (step < 0) {
+            if (helper.onPic > 0) {
+                styleObj.left = '+=' + (helper.photoItemWidth); // ズレ修正
+                helper.onPic -= 1;
+            } else {
+                // ここに「リミット」の演出を入れる予定
+            }
+        } else {
             styleObj = {};
+        }
+
+        $('.photo-list').css(styleObj);
+    };
+
+    function touchHandler (e) {
+        var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0]; // jQuery eventObj fix
 
         e.preventDefault();
 
@@ -81,23 +106,11 @@ var swipeControl = function () {
                 // helper の変数に依頼
                 // 50px 以上も移動したら、スワイプ操作だと認識される
                 if (touch.clientX - startX < -50) {
-                    if (helper.onPic < helper.picNum - 1) {
-                        styleObj.left = '-=' + (helper.photoItemWidth); // ズレ修正
-                        helper.onPic += 1;
-                    } else {
-                        // ここに「リミット」の演出を入れる予定
-                    }
+                    o.gotoPic(1);
                 } else if (touch.clientX - startX > 50) {
-                    if (helper.onPic > 0) {
-                        styleObj.left = '+=' + (helper.photoItemWidth); // ズレ修正
-                        helper.onPic -= 1;
-                    } else {
-                        // ここに「リミット」の演出を入れる予定
-                    }
-                } else {
-                    styleObj = {};
+                    o.gotoPic(-1);
                 }
-                $('.photo-list').css(styleObj);
+
                 break;
         }
     };
@@ -119,7 +132,6 @@ function dataGatherer (lat, lng) {
             + lng
             + '&distance=5000'
             + '&client_id=9e3fbb0b157c4390b1c224f0f174e39c';
-    console.log(url);
 
     
     // JSONP
@@ -162,7 +174,6 @@ function dataGatherer (lat, lng) {
                 .end()
                 .find('photo-interactions')
                     .html(info.likeNum + ' ♥ ' + info.comNum + ' …');
-                console.log('updated!');
         });
     });
 };
@@ -182,7 +193,6 @@ var geolocation = function () {
             var lat = pos.coords.latitude,
                 lng = pos.coords.longitude;
 
-            console.log(lat + ' ' + lng);
             dataGatherer(lat, lng);
         };
 
