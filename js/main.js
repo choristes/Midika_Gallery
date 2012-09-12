@@ -128,11 +128,23 @@ var mouseControl = function () {
     var o = {};
 
     o.detailClickHandler = function (e) {
-        var onPic = helper.onPic;
+        if (!$(this).parent().hasClass('instruction')) {
+            if ($('.overlay').css('display') === 'none') {
+                $('.overlay').fadeIn();
+            } else {
+                $('.overlay').fadeOut();
+            }
+
+            $(this).next().toggleClass('transparent')
+                .end()
+                .parent().toggleClass('on')
+                    .siblings().toggleClass('transparent');
+        }
     };
 
     o.init = function () {
         // .photo-listに.photo-itemのclickイベントをdelegate
+        $('.gallery-view').delegate('.photo-frame', 'click', o.detailClickHandler);
     };
 
     return o;
@@ -177,7 +189,7 @@ function dataGatherer (lat, lng) {
                 .end()
                 .find('.photo-time')
                     .html(
-                        info.time.getYear() + '.'
+                        (1900 + info.time.getYear()) + '.'
                         + info.time.getMonth() + '.'
                         + info.time.getDate() + ' '
                         + info.time.getHours() + ':'
@@ -187,7 +199,7 @@ function dataGatherer (lat, lng) {
                 .find('.photo-title')
                     .html(info.caption)
                 .end()
-                .find('photo-interactions')
+                .find('.photo-interactions')
                     .html(info.likeNum + ' ♥ ' + info.comNum + ' …');
         });
     });
@@ -223,6 +235,7 @@ $(function () {
     /* Init */
     helper.init();    
     swipeControl.init();
+    mouseControl.init();
 
     geolocation.init();
 

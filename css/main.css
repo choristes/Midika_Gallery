@@ -76,6 +76,15 @@ textarea {
 /* ==========================================================================
    Author's custom styles
    ========================================================================== */
+.overlay {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 5;
+}
 body {
   background-color: #ccc;
   background-repeat: no-repeat;
@@ -100,8 +109,8 @@ footer {
   font-size: 0.5em;
   background: url("../img/wood_tex.jpg") repeat-x;
   text-align: center;
-  -webkit-box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.3), 0 0 10px #999999;
-  box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.3), 0 0 10px #999999;
+  -webkit-box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.3), 0 0 10px rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.3), 0 0 10px rgba(0, 0, 0, 0.5);
   color: #fc9;
   text-shadow: #333333 0 -1px 1px, #ffffff 0 1px 1px;
 }
@@ -109,6 +118,7 @@ footer {
   width: 100%;
   position: relative;
   overflow: hidden;
+  z-index: 10;
 }
 .photo-list {
   width: 10000%;
@@ -131,14 +141,14 @@ footer {
   -moz-border-image: url("../img/frame.jpg") 30 / 30px round;
   -webkit-border-image: url("../img/frame.jpg") 30 / 30px round;
   border-image: url("../img/frame.jpg") 30 / 30px round;
-  -webkit-box-shadow: 0 6px 24px #999999;
-  box-shadow: 0 6px 24px #999999;
+  -webkit-box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
 }
 .photo-pic {
   width: 100%;
   height: auto;
-  -webkit-box-shadow: 0 0 1px #999999;
-  box-shadow: 0 0 1px #999999;
+  -webkit-box-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
 }
 .photo-pic-overlay {
   width: 100%;
@@ -166,12 +176,15 @@ footer {
   margin-top: 2em;
   text-align: center;
 }
-.photo-time {
-  float: right;
-}
 /* ==========================================================================
    Helper classes
    ========================================================================== */
+/*
+ * Transparent
+ */
+.transparent {
+  opacity: 0;
+}
 /*
  * Image replacement
  */
@@ -271,10 +284,12 @@ footer {
 }
 @media only screen and (orientation: landscape) {
   /* デバイスが横になる場合 */
-  .photo-frame,
+  .photo-frame {
+    width: 45%;
+  }
   .photo-info,
   .instruction-text {
-    width: 45%;
+    display: none;
   }
 }
 /* ==========================================================================
