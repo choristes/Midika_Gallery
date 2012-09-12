@@ -183,12 +183,6 @@ footer {
     box-shadow: 0 6px 24px @shadow-color;
 }
 
-@media only screen and (orientation: landscape) {
-    .photo-frame {
-        width: 30%;
-    }
-}
-
 .photo-pic {
     width: 100%;
     height: auto;
@@ -207,16 +201,22 @@ footer {
     background: url("../img/highlight_transparent.png") no-repeat;
 }
 
-.photo-info {
+.photo-info, .instruction-text {
     position: relative;
-    width: 64%;
+    width: 64%; // portrait の場合、landscape の場合は Media Queries に参照
     margin: 1em auto;
 
     p, h2 {
+        color: #999;
         font-size: 0.7em;
         margin: 0 0 0.3em 0;
         font-weight: normal;
     }
+}
+
+.instruction-text {
+    margin-top: 2em;
+    text-align: center;
 }
 
 .photo-time {
@@ -343,6 +343,13 @@ footer {
 @media only screen and (-webkit-min-device-pixel-ratio: 1.5),
        only screen and (min-resolution: 144dpi) {
     /* Style adjustments for high resolution devices */
+}
+
+@media only screen and (orientation: landscape) {
+    /* デバイスが横になる場合 */
+    .photo-frame, .photo-info, .instruction-text {
+        width: 45%;
+    }
 }
 
 /* ==========================================================================

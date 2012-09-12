@@ -134,11 +134,6 @@ footer {
   -webkit-box-shadow: 0 6px 24px #999999;
   box-shadow: 0 6px 24px #999999;
 }
-@media only screen and (orientation: landscape) {
-  .photo-frame {
-    width: 30%;
-  }
-}
 .photo-pic {
   width: 100%;
   height: auto;
@@ -152,16 +147,24 @@ footer {
   top: 0;
   background: url("../img/highlight_transparent.png") no-repeat;
 }
-.photo-info {
+.photo-info,
+.instruction-text {
   position: relative;
   width: 64%;
   margin: 1em auto;
 }
 .photo-info p,
-.photo-info h2 {
+.instruction-text p,
+.photo-info h2,
+.instruction-text h2 {
+  color: #999;
   font-size: 0.7em;
   margin: 0 0 0.3em 0;
   font-weight: normal;
+}
+.instruction-text {
+  margin-top: 2em;
+  text-align: center;
 }
 .photo-time {
   float: right;
@@ -265,6 +268,14 @@ footer {
 }
 @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 144dpi) {
   /* Style adjustments for high resolution devices */
+}
+@media only screen and (orientation: landscape) {
+  /* デバイスが横になる場合 */
+  .photo-frame,
+  .photo-info,
+  .instruction-text {
+    width: 45%;
+  }
 }
 /* ==========================================================================
    Print styles.

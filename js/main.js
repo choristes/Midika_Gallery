@@ -123,6 +123,21 @@ var swipeControl = function () {
     return o;
 }();
 
+// マウスコントロール（スクロールを含めて）
+var mouseControl = function () {
+    var o = {};
+
+    o.detailClickHandler = function (e) {
+        var onPic = helper.onPic;
+    };
+
+    o.init = function () {
+        // .photo-listに.photo-itemのclickイベントをdelegate
+    };
+
+    return o;
+}();
+
 // 抽出関数（JSONPでInstagramのAPIからデータを抽出）
 // Geolocationを取得してから初期化される
 function dataGatherer (lat, lng) {
