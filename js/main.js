@@ -116,8 +116,8 @@ var swipeControl = function () {
     };
 
     o.init = function () {
-        $(document).bind('touchstart', touchHandler);
-        $(document).bind('touchend', touchHandler);
+        $('.gallery-view').bind('touchstart', touchHandler);
+        $('.gallery-view').bind('touchend', touchHandler);
     };
 
     return o;
@@ -206,8 +206,8 @@ var geolocation = function () {
 $(function () {
     
     /* Init */
+    helper.init();    
     swipeControl.init();
-    helper.init();
 
     geolocation.init();
 
