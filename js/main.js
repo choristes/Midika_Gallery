@@ -6,9 +6,35 @@ var helper = function () {
 
     o.resizeTimer = null; // resize処理のタイマー
     o.photoItemWidth = 0; // .photo-item の width
-    o.picNum = 3; // 画像の枚数（ホーム画像を含めて）
+    o.picNum = 2; // 画像の枚数（ホーム画像を含めて）、初期は2
+    o.instructionPicNum = $('.instruction').length;
     o.onPic = 0; // 画面の真ん中にある画像の番号
     window.orientation = (typeof window.orientation !== 'undefined') ? window.orientation : 90;
+
+    o.gotoPic = function (picId) {
+        if (picId >= 0 && picId <= o.picNum - 1){
+            o.onPic = picId;
+            $('.photo-list').css('left', '-' + (o.onPic * o.photoItemWidth) + 'px');
+        } else {
+            // ここに「リミット」の演出を入れる予定
+        }
+    };
+
+    o.toggleDetail = function (picId) {
+        if (picId > o.instructionPicNum - 1) {
+            // 真ん中の画像の情報を開閉、ほかの画像を開閉する
+            $('.photo-frame').eq(picId).next().toggleClass('transparent')
+                .parent().toggleClass('on')
+                    .siblings().toggleClass('transparent');
+
+            // .overlay を開閉する
+            if (!$('.overlay').hasClass('on')) {
+                $('.overlay').addClass('on');
+            } else {
+                $('.overlay').removeClass('on');
+            }
+        }
+    };
 
     o.resizeHandler = function () {
         var viewHeight = $(document).height() - $('header').height() * 2; // .view の height 
@@ -65,33 +91,8 @@ var helper = function () {
 // スワイプコントロール（.gallery-view 中の .photo-list を動かす） 
 var swipeControl = function () {
     var o = {},
-        startX = 0;
-
-    // .photo-list を動かす
-    o.gotoPic = function (step) {
-        var styleObj = {};
-        step = Math.floor(step);
-
-        if (step > 0) {
-            if (helper.onPic < helper.picNum - 1) {
-                styleObj.left = '-=' + (helper.photoItemWidth); // ズレ修正
-                helper.onPic += 1;
-            } else {
-                // ここに「リミット」の演出を入れる予定
-            }
-        } else if (step < 0) {
-            if (helper.onPic > 0) {
-                styleObj.left = '+=' + (helper.photoItemWidth); // ズレ修正
-                helper.onPic -= 1;
-            } else {
-                // ここに「リミット」の演出を入れる予定
-            }
-        } else {
-            styleObj = {};
-        }
-
-        $('.photo-list').css(styleObj);
-    };
+        startX = 0,
+        startY = 0;
 
     function touchHandler (e) {
         var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0]; // jQuery eventObj fix
@@ -100,18 +101,23 @@ var swipeControl = function () {
 
         switch (e.type) {
             case 'touchstart':
-                startX = touch.clientX;
+                startX = touch.clientX,
+                startY = touch.clientY;
                 break;
 
             case 'touchend':
                 // helper の変数に依頼
                 // 50px 以上も移動したら、スワイプ操作だと認識される
                 if (touch.clientX - startX < -50) {
-                    o.gotoPic(1);
+                    helper.gotoPic(helper.onPic + 1);
                 } else if (touch.clientX - startX > 50) {
-                    o.gotoPic(-1);
+                    helper.gotoPic(helper.onPic - 1);
+                } else {
+                    //スワイプ操作ではない場合、タッチ操作かをチェック
+                    if ($(e.target).is('.photo-frame') || $(e.target).parent().is('.photo-frame')) {
+                        helper.toggleDetail(helper.onPic);
+                    }
                 }
-
                 break;
         }
     };
@@ -124,22 +130,17 @@ var swipeControl = function () {
     return o;
 }();
 
-// マウスコントロール（スクロールを含めて）
+// マウスコントロール
 var mouseControl = function () {
     var o = {};
 
     o.detailClickHandler = function (e) {
-        if (!$(this).parent().hasClass('instruction')) {
-            if ($('.overlay').css('display') === 'none') {
-                $('.overlay').fadeIn();
-            } else {
-                $('.overlay').fadeOut();
-            }
+        e.preventDefault();
 
-            $(this).next().toggleClass('transparent')
-                .end()
-                .parent().toggleClass('on')
-                    .siblings().toggleClass('transparent');
+        if ($(e.currentTarget).parent().index() === helper.onPic) {
+            helper.toggleDetail(helper.onPic);            
+        } else {
+            helper.gotoPic($(e.currentTarget).parent().index());            
         }
     };
 
@@ -160,12 +161,11 @@ function dataGatherer (lat, lng) {
             + lng
             + '&distance=5000'
             + '&client_id=9e3fbb0b157c4390b1c224f0f174e39c';
-
     
     // JSONP
     $.getJSON(url + "&callback=?", function (result) {
         // .photo-item の個数を満たす
-        helper.picNum = result.data.length + $('.instruction').length;
+        helper.picNum = result.data.length + helper.instructionPicNum;
         while ($('.photo-item').length < helper.picNum) {
             $('.photo-item:last').clone(true).appendTo($('.photo-list'));
         }
@@ -179,7 +179,8 @@ function dataGatherer (lat, lng) {
                 caption: dataItem.caption ? dataItem.caption.text : 'Untitled',
                 time: new Date(dataItem.created_time * 1000), // UNIX Time Stamp をJSのDate対象に変換
                 likeNum: dataItem.likes.count,
-                comNum: dataItem.comments.count
+                comNum: dataItem.comments.count,
+                link: dataItem.link
             };
 
             // info 詳細を入れる
@@ -198,7 +199,7 @@ function dataGatherer (lat, lng) {
                     )
                 .end()
                 .find('.photo-title')
-                    .html(info.caption)
+                    .attr('href', info.link).html(info.caption)
                 .end()
                 .find('.photo-interactions')
                     .html(info.likeNum + ' ♥ ' + info.comNum + ' …');
