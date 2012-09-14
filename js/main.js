@@ -13,11 +13,13 @@ var helper = function () {
     window.orientation = (typeof window.orientation !== 'undefined') ? window.orientation : 90;
 
     o.gotoPic = function (picId) {
-        if (picId >= 0 && picId <= o.picNum - 1){
-            o.onPic = picId;
-            $('.photo-list').css('left', '-' + (o.onPic * o.photoItemWidth) + 'px');
-        } else {
-            // ここに「リミット」の演出を入れる予定
+        if (!$('.overlay').hasClass('on')) {
+            if (picId >= 0 && picId <= o.picNum - 1){
+                o.onPic = picId;
+                $('.photo-list').css('left', '-' + (o.onPic * o.photoItemWidth) + 'px');
+            } else {
+                // ここに「リミット」の演出を入れる予定
+            }
         }
     };
 
@@ -146,27 +148,32 @@ var swipeControl = function () {
 var mouseControl = function () {
     var o = {};
 
-    o.detailClickHandler = function (e) {
+    o.clickHandler = function (e) {
         e.preventDefault();
 
-        // 初めての実行で、controlTypeを決める
-        if (helper.controlType === 0) {
-            helper.controlType = 2;
-        }
+        switch (e.type) {
+            case 'click':
+                // 初めての実行で、controlTypeを決める
+                if (helper.controlType === 0) {
+                    helper.controlType = 2;
+                }
 
-        // controlTypeを確認、2ならMouse操作を処理
-        if (helper.controlType === 2) {
-            if ($(e.currentTarget).parent().index() === helper.onPic) {
-                helper.toggleDetail(helper.onPic);            
-            } else {
-                helper.gotoPic($(e.currentTarget).parent().index());            
-            }
+                // controlTypeを確認、2ならMouse操作を処理
+                if (helper.controlType === 2) {
+                    if ($(e.currentTarget).parent().index() === helper.onPic) {
+                        helper.toggleDetail(helper.onPic);            
+                    } else {
+                        helper.gotoPic($(e.currentTarget).parent().index());            
+                    }
+                }
+
+                break;
         }
     };
 
     o.init = function () {
         // .photo-listに.photo-itemのclickイベントをdelegate
-        $('.gallery-view').delegate('.photo-frame', 'click', o.detailClickHandler);
+        $('.gallery-view').delegate('.photo-frame', 'click', o.clickHandler);
     };
 
     return o;
