@@ -4,6 +4,7 @@
 var helper = function () {
     var o = {};
 
+    o.controlType = 0; // Touchなら1、Mouseなら2（Android Browserでの混乱を避けるため）
     o.resizeTimer = null; // resize処理のタイマー
     o.photoItemWidth = 0; // .photo-item の width
     o.picNum = 2; // 画像の枚数（ホーム画像を含めて）、初期は2
@@ -99,27 +100,35 @@ var swipeControl = function () {
 
         e.preventDefault();
 
-        switch (e.type) {
-            case 'touchstart':
-                startX = touch.clientX,
-                startY = touch.clientY;
-                break;
-
-            case 'touchend':
-                // helper の変数に依頼
-                // 50px 以上も移動したら、スワイプ操作だと認識される
-                if (touch.clientX - startX < -50) {
-                    helper.gotoPic(helper.onPic + 1);
-                } else if (touch.clientX - startX > 50) {
-                    helper.gotoPic(helper.onPic - 1);
-                } else {
-                    //スワイプ操作ではない場合、タッチ操作かをチェック
-                    if ($(e.target).is('.photo-frame') || $(e.target).parent().is('.photo-frame')) {
-                        helper.toggleDetail(helper.onPic);
-                    }
-                }
-                break;
+        // 初めての実行で、controlTypeを決める
+        if (helper.controlType === 0) {
+            helper.controlType = 1;
         }
+
+        // controlTypeを確認、1ならTouch操作を処理
+        if (helper.controlType === 1) {
+            switch (e.type) {
+                case 'touchstart':
+                    startX = touch.clientX,
+                    startY = touch.clientY;
+                    break;
+
+                case 'touchend':
+                    // helper の変数に依頼
+                    // 50px 以上も移動したら、スワイプ操作だと認識される
+                    if (touch.clientX - startX < -50) {
+                        helper.gotoPic(helper.onPic + 1);
+                    } else if (touch.clientX - startX > 50) {
+                        helper.gotoPic(helper.onPic - 1);
+                    } else {
+                        //スワイプ操作ではない場合、タッチ操作かをチェック
+                        if ($(e.target).is('.photo-frame') || $(e.target).parent().is('.photo-frame')) {
+                            helper.toggleDetail(helper.onPic);
+                        }
+                    }
+                    break;
+            }
+        }  
     };
 
     o.init = function () {
@@ -137,10 +146,18 @@ var mouseControl = function () {
     o.detailClickHandler = function (e) {
         e.preventDefault();
 
-        if ($(e.currentTarget).parent().index() === helper.onPic) {
-            helper.toggleDetail(helper.onPic);            
-        } else {
-            helper.gotoPic($(e.currentTarget).parent().index());            
+        // 初めての実行で、controlTypeを決める
+        if (helper.controlType === 0) {
+            helper.controlType = 2;
+        }
+
+        // controlTypeを確認、2ならMouse操作を処理
+        if (helper.controlType === 2) {
+            if ($(e.currentTarget).parent().index() === helper.onPic) {
+                helper.toggleDetail(helper.onPic);            
+            } else {
+                helper.gotoPic($(e.currentTarget).parent().index());            
+            }
         }
     };
 
