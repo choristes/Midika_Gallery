@@ -98,7 +98,10 @@ var swipeControl = function () {
     function touchHandler (e) {
         var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0]; // jQuery eventObj fix
 
-        e.preventDefault();
+        // .photo-info の子要素でのイベントが防げられないようにする
+        if ($(e.target).parents('.photo-info').length === 0) {
+            e.preventDefault();            
+        }
 
         // 初めての実行で、controlTypeを決める
         if (helper.controlType === 0) {
