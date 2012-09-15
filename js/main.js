@@ -39,6 +39,11 @@ var helper = function () {
         }
     };
 
+    // .photo-listのwidthを再調整
+    o.resizePhotoList = function () {
+        $('.photo-list').width($('.view').width() + o.photoItemWidth * (o.picNum - 1));
+    };
+
     o.resizeHandler = function () {
         var viewHeight = $(document).height() - $('header').height() * 2; // .view の height 
 
@@ -52,16 +57,12 @@ var helper = function () {
 
         endItemMargin = Math.floor(($('.view').width() - o.photoItemWidth) / 2);
 
-
-
         $('.view').height(viewHeight);
         $('.photo-item').width(o.photoItemWidth)
             .first().css('margin-left', endItemMargin + 'px');
 
         $('.photo-frame').height($('.photo-frame').width());
         $('.photo-pic-overlay').height($('.photo-pic-overlay').width());
-
-        // console.log('resizeHandler完了');
     };
 
     o.resetPhotoListPos = function (e) {
@@ -83,6 +84,8 @@ var helper = function () {
             // タイマーをクリアしたから、実行回数は一回だけなはずだが
             // 原因：スマホでresizeHandlerが実行した後、DOMの変動によってresizeイベントが引き起こされたのです
         });
+
+        $('.photo-list').bind('json.update', o.resizePhotoList);
     };        
 
     return o;
@@ -230,7 +233,11 @@ function dataGatherer (lat, lng) {
                 .end()
                 .find('.photo-interactions')
                     .html(info.likeNum + ' ♥ ' + info.comNum + ' …');
+
+            
         });
+        // json.updateというイベントを引き起こす
+        $('.photo-list').trigger('json.update');
     });
 };
 
