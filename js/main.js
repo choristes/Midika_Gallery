@@ -18,23 +18,27 @@ var helper = function () {
                 o.onPic = picId;
                 $('.photo-list').css('left', '-' + (o.onPic * o.photoItemWidth) + 'px');
             } else {
-                // ここに「リミット」の演出を入れる予定
+                // リミットの場合、最初か最後の画像に戻る
+                arguments.callee(o.onPic);
             }
         }
     };
 
     o.toggleDetail = function (picId) {
         if (picId > o.instructionPicNum - 1) {
-            // 真ん中の画像の情報を開閉、ほかの画像を開閉する
-            $('.photo-frame').eq(picId).next().toggleClass('transparent')
-                .parent().toggleClass('on')
-                    .siblings().toggleClass('transparent');
-
             // .overlay を開閉する
             if (!$('.overlay').hasClass('on')) {
                 $('.overlay').addClass('on');
+                // 真ん中の画像の情報を開閉、ほかの画像を開閉する
+                $('.photo-frame').eq(picId).next().removeClass('transparent')
+                    .parent().addClass('on')
+                        .siblings().addClass('transparent');
             } else {
                 $('.overlay').removeClass('on');
+                // 真ん中の画像の情報を開閉、ほかの画像を開閉する
+                $('.photo-frame').eq(picId).next().addClass('transparent')
+                    .parent().removeClass('on')
+                        .siblings().removeClass('transparent');
             }
         }
     };
@@ -139,6 +143,7 @@ var swipeControl = function () {
                         helper.gotoPic(helper.onPic - 1);
                     } else {
                         //スワイプ操作ではない場合、タッチ操作かをチェック
+                        helper.gotoPic(helper.onPic); // touchmoveの怪しい場合を修正
                         if ($(e.target).is('.photo-frame') || $(e.target).parent().is('.photo-frame')) {
                             helper.toggleDetail(helper.onPic);
                         }
@@ -207,7 +212,10 @@ function dataGatherer (lat, lng) {
         // .photo-item の個数を満たす
         helper.picNum = result.data.length + helper.instructionPicNum;
         while ($('.photo-item').length < helper.picNum) {
-            $('.photo-item:last').clone(true).appendTo($('.photo-list'));
+            $('.photo-item:last').clone(true).removeClass('on') // appendを実行するまえに、classを清掃する
+                .find('.photo-info').addClass('transparent')
+                .end()
+                .appendTo($('.photo-list'));
         }
 
         // .photo-item の詳細を入れる

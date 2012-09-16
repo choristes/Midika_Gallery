@@ -152,6 +152,10 @@ footer {
 .photo-item {
   display: block;
   float: left;
+  -webkit-transition: -webkit-transform 0.3s ease 0s;
+  -moz-transition: -moz-transform 0.3s ease 0s;
+  -o-transition: -o-transform 0.3s ease 0s;
+  transition: transform 0.3s ease 0s;
 }
 .photo-frame {
   position: relative;
@@ -312,9 +316,7 @@ footer {
   }
 }
 @media only screen and (min-width: 1024px) {
-  .view {
-    overflow: scroll;
-  }
+  /* PCの場合 */
   .photo-frame,
   .photo-info {
     width: 75%;
@@ -324,6 +326,22 @@ footer {
   }
   .touch-text {
     display: none;
+  }
+  .photo-info {
+    margin-top: 6.5em;
+  }
+  /* 画像がオンにされた場合 */
+  .photo-item.on .photo-frame {
+    -webkit-transform-origin: center top;
+    -moz-transform-origin: center top;
+    -o-transform-origin: center top;
+    -ms-transform-origin: center top;
+    transform-origin: center top;
+    -webkit-transform: scale(1.2);
+    -moz-transform: scale(1.2);
+    -o-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    transform: scale(1.2);
   }
 }
 /* ==========================================================================
