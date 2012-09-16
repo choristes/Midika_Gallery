@@ -98,7 +98,9 @@ var helper = function () {
 var swipeControl = function () {
     var o = {},
         startX = 0,
-        startY = 0;
+        startY = 0,
+        startLeft = 0,
+        nudgeTimer = null; // touchmoveイベント処理のタイマー
 
     function touchHandler (e) {
         var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0]; // jQuery eventObj fix
@@ -119,6 +121,13 @@ var swipeControl = function () {
                 case 'touchstart':
                     startX = touch.clientX,
                     startY = touch.clientY;
+                    startLeft = 1 * $('.photo-list').css('left').match(/\-?\d+/);
+                    break;
+
+                case 'touchmove':
+                    // touchmove でのモーション
+                    console.log((startLeft + touch.clientX - startX) + 'px');
+                    $('.photo-list').css('left', (startLeft + touch.clientX - startX) + 'px');
                     break;
 
                 case 'touchend':
@@ -141,6 +150,7 @@ var swipeControl = function () {
 
     o.init = function () {
         $('.gallery-view').bind('touchstart', touchHandler);
+        $('.gallery-view').bind('touchmove', touchHandler);
         $('.gallery-view').bind('touchend', touchHandler);
     };
 
