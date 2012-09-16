@@ -49,7 +49,7 @@ var helper = function () {
     };
 
     o.resizeHandler = function () {
-        var viewHeight = $(document).height() - $('header').height() * 2; // .view の height 
+        var viewHeight = $(document).height() - $('header').height(); // .view の height 
 
         // デフォルト デバイスの向きが縦の場合
         o.photoItemWidth = Math.floor(window.innerWidth * 0.75);

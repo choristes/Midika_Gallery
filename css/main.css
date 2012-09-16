@@ -103,18 +103,12 @@ a:active {
   opacity: 1;
 }
 body {
-  background-color: #cccccc;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-image: -webkit-gradient(radial, center center, 0, center center, 160, from(#ffffff), to(#cccccc));
-  background-image: -moz-radial-gradient(center center, circle cover, #ffffff 0%, #cccccc 100%);
-  background-image: -o-radial-gradient(center center, circle cover, #ffffff 0%, #cccccc 100%);
-  background-image: radial-gradient(center center, circle cover, #ffffff 0%, #cccccc 100%);
+  background: #262626 url('../img/bg.jpg') repeat-x;
   font-family: 'Muli', sans-serif;
 }
 header {
   width: 100%;
-  height: 30px;
+  height: 0px;
 }
 footer {
   position: fixed;
@@ -144,6 +138,7 @@ footer {
   top: 0;
   margin: 0;
   padding: 0;
+  padding-top: 30px;
   -webkit-transition: all 0.3s ease 0s;
   -moz-transition: all 0.3s ease 0s;
   -o-transition: all 0.3s ease 0s;
