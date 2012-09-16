@@ -206,11 +206,6 @@ footer {
     display: block;
     float: left;
 
-    -webkit-transition: -webkit-transform 0.3s ease 0s;
-    -moz-transition: -moz-transform 0.3s ease 0s;
-    -o-transition: -o-transform 0.3s ease 0s;
-    transition: transform 0.3s ease 0s;
-
     &.on {
         // clickされ、詳細が表示された場合
     }
@@ -223,12 +218,19 @@ footer {
     width: 64%;
     margin: 0 auto;
 
+    cursor: pointer;
+
     -moz-border-image: url("../img/frame.jpg") ~"30 / 30px" round;
     -webkit-border-image: url("../img/frame.jpg") ~"30 / 30px" round;
     border-image: url("../img/frame.jpg") ~"30 / 30px" round;
 
     -webkit-box-shadow:  0 6px 24px @shadow-color;
     box-shadow: 0 6px 24px @shadow-color;
+
+    -webkit-transition: -webkit-transform 0.3s ease 0s;
+    -moz-transition: -moz-transform 0.3s ease 0s;
+    -o-transition: -o-transform 0.3s ease 0s;
+    transition: transform 0.3s ease 0s;
 }
 
 .photo-pic {
