@@ -28,7 +28,7 @@
 
         o.moveto = function (offset) {
             $('.photo-list').css('-webkit-transform', 'translate3d(' + offset + 'px, 0, 0)');
-            $('body').css('background-position-x', offset +'px');
+            // $('body').css('background-position-x', offset +'px');
         }
 
         o.toggleDetail = function (picId) {
@@ -136,7 +136,7 @@
                         startLeft = -1 * helper.onPic * helper.photoItemWidth;
 
                         // 次のtouchmoveの時に、モーション改善のため、transitionをオフにする
-                        $('.photo-list').add('body').removeClass('transition');
+                        $('.photo-list')/*.add('body')*/.removeClass('transition');
                         break;
 
                     case 'touchmove':
@@ -146,7 +146,7 @@
 
                     case 'touchend':
                         // touchmoveが終わったら、transitionをオンにする
-                        $('.photo-list').add('body').addClass('transition');
+                        $('.photo-list')/*.add('body')*/.addClass('transition');
 
                         // helper の変数に依頼
                         // 50px 以上も移動したら、スワイプ操作だと認識される
