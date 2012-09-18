@@ -141,7 +141,9 @@
 
                     case 'touchmove':
                         // touchmove でのモーション
-                        helper.moveto(startLeft + touch.clientX - startX);
+                        if (!$('.overlay').hasClass('on')) {
+                            helper.moveto(startLeft + touch.clientX - startX);
+                        }
                         break;
 
                     case 'touchend':
