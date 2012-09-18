@@ -187,7 +187,7 @@ footer {
 
     margin: 0;
     padding: 0;
-    padding-top: 30px;
+    padding-top: 3.5em;
 }
 
 .photo-item {
@@ -214,7 +214,7 @@ footer {
     position: relative;
     // width は media queries （デバイスの向き）によって設置
     // 縦の場合は 64%、横の場合は 30%
-    width: 64%;
+    width: 70%;
     margin: 0 auto;
 
     cursor: pointer;
@@ -252,7 +252,7 @@ footer {
 
 .photo-info, .instruction-text {
     position: relative;
-    width: 70%; // landscape の場合は Media Queries に参照
+    width: 77%; // landscape の場合は Media Queries に参照
     margin: 2em auto;
 
     p, h2 {
@@ -407,13 +407,16 @@ footer {
 @media only screen and (orientation: landscape) {
     /* デバイスが横になる場合 */
     .photo-frame {
-        width: 45%;
+        width: 70%;
     }
 }
 
 @media only screen and (orientation: landscape) and (max-height: 320px) {
+    .photo-frame {
+        width: 45%;
+    }
     .photo-list {
-        padding-top: 25px;
+        padding-top: 30px;
     }
     .photo-info, .instruction-text {
         display: none;
@@ -452,7 +455,7 @@ footer {
     }
 
     .photo-info {
-        margin-top: 3.5em;
+        margin-top: 3em;
     }
 
     /* 画像がオンにされた場合 */

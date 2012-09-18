@@ -140,7 +140,7 @@ footer {
   top: 0;
   margin: 0;
   padding: 0;
-  padding-top: 30px;
+  padding-top: 3.5em;
 }
 .photo-item {
   display: block;
@@ -155,7 +155,7 @@ footer {
 }
 .photo-frame {
   position: relative;
-  width: 64%;
+  width: 70%;
   margin: 0 auto;
   cursor: pointer;
   -moz-border-image: url("../img/frame.jpg") 30 / 30px round;
@@ -184,7 +184,7 @@ footer {
 .photo-info,
 .instruction-text {
   position: relative;
-  width: 70%;
+  width: 77%;
   margin: 2em auto;
 }
 .photo-info p,
@@ -314,12 +314,15 @@ footer {
 @media only screen and (orientation: landscape) {
   /* デバイスが横になる場合 */
   .photo-frame {
-    width: 45%;
+    width: 70%;
   }
 }
 @media only screen and (orientation: landscape) and (max-height: 320px) {
+  .photo-frame {
+    width: 45%;
+  }
   .photo-list {
-    padding-top: 25px;
+    padding-top: 30px;
   }
   .photo-info,
   .instruction-text {
@@ -355,7 +358,7 @@ footer {
     display: none;
   }
   .photo-info {
-    margin-top: 3.5em;
+    margin-top: 3em;
   }
   /* 画像がオンにされた場合 */
   .photo-item.on .photo-frame {
