@@ -322,8 +322,19 @@ footer {
   }
 }
 @media only screen and (orientation: landscape) and (max-height: 320px) {
+  .photo-list {
+    padding-top: 10px;
+  }
   .photo-info,
   .instruction-text {
+    display: none;
+  }
+}
+@media only screen and (orientation: landscape) and (max-height: 220px) {
+  body {
+    background: #333;
+  }
+  footer {
     display: none;
   }
 }

@@ -47,11 +47,6 @@ var helper = function () {
         }
     };
 
-    // .photo-listのwidthを再調整
-    o.resizePhotoList = function () {
-        $('.photo-list').width($('.view').width() + o.photoItemWidth * (o.picNum - 1));
-    };
-
     o.resizeHandler = function () {
         var viewHeight = $(document).height() - $('header').height(); // .view の height 
 
@@ -77,6 +72,11 @@ var helper = function () {
         $('.photo-list').css('left', '-' + ((o.photoItemWidth) * o.onPic) +'px'); // ズレ修正
     };
 
+    // .photo-listのwidthを再調整
+    o.resizePhotoList = function () {
+        $('.photo-list').width($('.view').width() + o.photoItemWidth * (o.picNum - 1));
+    };
+
     o.init = function () {
         o.resizeTimer = setTimeout(function () {
             o.resizeHandler();
@@ -86,6 +86,7 @@ var helper = function () {
             clearTimeout(o.resizeTimer);
             o.resizeTimer = setTimeout(function(){
                 o.resizeHandler();
+                o.resizePhotoList();
                 o.resetPhotoListPos();
             }, 100);
             // 問題：どうして縦になるとき、resizeHandler は二回も実行される？
