@@ -85,6 +85,12 @@ a:active {
   text-decoration: none;
   border-bottom: 1px dotted #999999;
 }
+.transition {
+  -webkit-transition: all 0.3s ease 0s;
+  -moz-transition: all 0.3s ease 0s;
+  -o-transition: all 0.3s ease 0s;
+  transition: all 0.3s ease 0s;
+}
 .overlay {
   position: fixed;
   left: 0;
@@ -139,10 +145,6 @@ footer {
   margin: 0;
   padding: 0;
   padding-top: 30px;
-  -webkit-transition: all 0.3s ease 0s;
-  -moz-transition: all 0.3s ease 0s;
-  -o-transition: all 0.3s ease 0s;
-  transition: all 0.3s ease 0s;
 }
 .photo-item {
   display: block;

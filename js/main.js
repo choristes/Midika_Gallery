@@ -16,13 +16,17 @@ var helper = function () {
         if (!$('.overlay').hasClass('on')) {
             if (picId >= 0 && picId <= o.picNum - 1){
                 o.onPic = picId;
-                $('.photo-list').css('left', '-' + (o.onPic * o.photoItemWidth) + 'px');
+                o.moveto(-1 * (picId * o.photoItemWidth));
             } else {
                 // リミットの場合、最初か最後の画像に戻る
                 arguments.callee(o.onPic);
             }
         }
     };
+
+    o.moveto = function (offset) {
+        $('.photo-list').css('left', offset + 'px');
+    }
 
     o.toggleDetail = function (picId) {
         if (picId > o.instructionPicNum - 1) {
@@ -125,16 +129,21 @@ var swipeControl = function () {
                 case 'touchstart':
                     startX = touch.clientX,
                     startY = touch.clientY;
-                    startLeft = 1 * $('.photo-list').css('left').match(/\-?\d+/);
+                    startLeft = 1 * $('.photo-list').css('left').match(/[^px]+/);
+
+                    // 次のtouchmoveの時に、モーション改善のため、transitionをオフにする
+                    $('.photo-list').removeClass('transition');
                     break;
 
                 case 'touchmove':
                     // touchmove でのモーション
-                    console.log((startLeft + touch.clientX - startX) + 'px');
-                    $('.photo-list').css('left', (startLeft + touch.clientX - startX) + 'px');
+                    helper.moveto(startLeft + touch.clientX - startX);
                     break;
 
                 case 'touchend':
+                    // touchmoveが終わったら、transitionをオンにする
+                    $('.photo-list').addClass('transition');
+
                     // helper の変数に依頼
                     // 50px 以上も移動したら、スワイプ操作だと認識される
                     if (touch.clientX - startX < -50) {
