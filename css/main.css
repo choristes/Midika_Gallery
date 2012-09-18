@@ -100,16 +100,12 @@ a:active {
   background: rgba(0, 0, 0, 0.8);
   z-index: 5;
   opacity: 0;
-  -webkit-transition: all 0.3s ease 0s;
-  -moz-transition: all 0.3s ease 0s;
-  -o-transition: all 0.3s ease 0s;
-  transition: all 0.3s ease 0s;
 }
 .overlay.on {
   opacity: 1;
 }
 body {
-  background: #262626 url('../img/bg.jpg') repeat-x;
+  background: #262626 url('../img/bg.jpg') repeat-x 0 0;
   font-family: 'Muli', sans-serif;
 }
 header {
