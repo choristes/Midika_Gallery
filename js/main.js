@@ -27,7 +27,7 @@
         };
 
         o.moveto = function (offset) {
-            $('.photo-list').css('left', offset + 'px');
+            $('.photo-list').css('-webkit-transform', 'translate3d(' + offset + 'px, 0, 0)');
             $('body').css('background-position-x', offset +'px');
         }
 
@@ -72,8 +72,7 @@
         };
 
         o.resetPhotoListPos = function (e) {
-            $('.photo-list').css('left', '-' + ((o.photoItemWidth) * o.onPic) +'px');
-            $('body').css('background-position-x', '-' + ((o.photoItemWidth) * o.onPic) +'px');
+            o.gotoPic(o.onPic);
         };
 
         // .photo-listのwidthを再調整
@@ -134,7 +133,7 @@
                     case 'touchstart':
                         startX = touch.clientX,
                         startY = touch.clientY;
-                        startLeft = 1 * $('.photo-list').css('left').match(/[^px]+/);
+                        startLeft = -1 * helper.onPic * helper.photoItemWidth;
 
                         // 次のtouchmoveの時に、モーション改善のため、transitionをオフにする
                         $('.photo-list').add('body').removeClass('transition');
