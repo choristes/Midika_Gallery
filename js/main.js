@@ -91,7 +91,7 @@
                     o.resizeHandler();
                     o.resizePhotoList();
                     o.resetPhotoListPos();
-                }, 100);
+                }, 200);
                 // 問題：どうして縦になるとき、resizeHandler は二回も実行される？
                 // タイマーをクリアしたから、実行回数は一回だけなはずだが
                 // 原因：スマホでresizeHandlerが実行した後、DOMの変動によってresizeイベントが引き起こされたのです
