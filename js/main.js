@@ -27,7 +27,11 @@
         };
 
         o.moveto = function (offset) {
-            $('.photo-list').css('-webkit-transform', 'translate3d(' + offset + 'px, 0, 0)');
+            $('.photo-list').css('-webkit-transform', 'translate3d(' + offset + 'px, 0, 0)')
+                .css('-moz-transform', 'translate3d(' + offset + 'px, 0, 0)')
+                .css('-o-transform', 'translate3d(' + offset + 'px, 0, 0)')
+                .css('-ms-transform', 'translate3d(' + offset + 'px, 0, 0)')
+                .css('transform', 'translate3d(' + offset + 'px, 0, 0)');
             // $('body').css('background-position-x', offset +'px');
         }
 
